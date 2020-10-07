@@ -47,8 +47,20 @@ public class Quiz {
 
     }
 
-    public void shuffle(){
-        
+    private void shuffle(){
+        int index;
+        Question temp;
+        for(int i=this.quizSize-1;i>0;i--){
+            index=randomNum(0,i);
+            temp= this.questions[index];
+            this.questions[index]=this.questions[i];
+            this.questions[i]=temp;
+        }
     }
+
+    private static int randomNum(int min,int max){
+        return (int)(Math.random()*(max-min));
+    }
+
 }
 
