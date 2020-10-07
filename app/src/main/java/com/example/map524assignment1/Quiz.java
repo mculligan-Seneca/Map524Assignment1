@@ -43,7 +43,7 @@ public class Quiz {
         this.correct=0;
         this.currentQuestion=0;
         if(newOrder)
-            this.shuffle();
+            this.shuffle();//test commit
 
     }
 
