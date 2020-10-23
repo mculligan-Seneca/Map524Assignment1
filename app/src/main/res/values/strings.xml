@@ -1,5 +1,19 @@
 <resources>
-    <string name="app_name">Map524Assignment1</string>
+    <string name="app_name">Assingment 1 - Comp sci Quiz</string>
     <string name="t_btn">True</string>
     <string name="f_btn">False</string>
+    <string name="right_answer">That answer was correct!</string>
+    <string name="wrong_answer">That answer was wrong!</string>
+    <string name="complete_toast">Quiz finished</string>
+    <string name="completion_mssg">Quiz Complete! Your score was: </string>
+    <string name="repeat">Repeat</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_msg">"Something went wrong "</string>
+    <string name="question_1">RAM stands for Random Access Memory</string>
+    <string name="question_2">C++ is a garbage collected lanaguage</string>
+    <string name="question_3">The process of converting a highlevel language into machine code is known as compilation</string>
+    <string name="question_4">The octal format for the permissions r-x-wxrw- is 536</string>
+    <string name="question_5">Java is pass by reference</string>
+    <string name="French">French</string>
+    <string name="English">English</string>
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">French - Comp sci Quiz</string>
+    <string name="t_btn" >Vrai</string>
+    <string name="f_btn">Faux</string>
+    <string name="right_answer">Cette réponse était correcte!</string>
+    <string name="wrong_answer">Cette réponse était fausse!</string>
+    <string name="complete_toast">Quiz terminé</string>
+    <string name="completion_mssg">Quiz terminé! Votre score était:</string>
+    <string name="repeat">Répéter</string>
+    <string name="cancel">Annuler</string>
+    <string name="error_msg">Un problème est survenu</string>
+    <string name="question_1">" RAM signifie Random Access Memory"</string>
+    <string name="question_2">" C ++ est un langage garbage collection"</string>
+    <string name="question_3">" Le processus de conversion d'un langage de haut niveau en code machine est appelé compilation"</string>
+    <string name="question_4">" Le format octal pour les permissions r-x-wxrw- est 536"</string>
+    <string name="question_5">" Java est passé par référence"</string>
+    <string name="French">Français</string>
+    <string name="English">Anglais</string>
+</resources>
