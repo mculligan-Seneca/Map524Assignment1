@@ -1,5 +1,6 @@
 package com.example.map524assignment1;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,7 @@ public class QuestionFragment extends Fragment {
    // private View v;
     private int colour;
     private int text;
+
     public QuestionFragment() {
         // Required empty public constructor
     }
@@ -41,9 +43,11 @@ public class QuestionFragment extends Fragment {
      * @return A new instance of fragment QuestionFragment.
      */
     // TODO: Rename and change types and number of parameters
-   public static QuestionFragment newInstance(Bundle args) {
+   public static QuestionFragment newInstance(int text, int colour) {
         QuestionFragment fragment = new QuestionFragment();
-
+        Bundle args = new Bundle();
+        args.putInt(QuestionFragment.ARG_TEXT,text);
+        args.putInt(QuestionFragment.ARG_COLOR,colour);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,11 +71,13 @@ public class QuestionFragment extends Fragment {
         // Inflate the layout for this fragment
          View v =  inflater.inflate(R.layout.fragment_question, container, false);
          //this.setQuestion();
-        v.setBackgroundColor(getResources().getColor(this.colour));
+        v.setBackgroundResource(this.colour);
+
         ((TextView)v.findViewById(R.id.question_id)).setText(this.text);
-        Log.d("fragment_init", Locale.getDefault().toLanguageTag());
+
         return v;
     }
+
 
 
 

@@ -42,10 +42,10 @@ public class Question implements Parcelable {
         }
     };
 
-    public Bundle getQuestion(Bundle args){
+    public int getQuestion(){
 
-            args.putInt(QuestionFragment.ARG_TEXT,this.question);
-            return args;
+
+            return this.question;
     }
 
     public boolean answerQuestion(int attempt){

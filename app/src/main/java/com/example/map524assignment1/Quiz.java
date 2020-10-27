@@ -55,19 +55,20 @@ public class Quiz implements Parcelable {
         return this.quizSize;
     }
 
-    public Bundle getQuestionInfo(){
-
-        Bundle bund = new Bundle();
-        bund.putInt(QuestionFragment.ARG_COLOR, this.colors.get(this.currentQuestion%this.colors.size()));
-        if(!this.isFinished())
-            bund = this.questions.get(this.currentQuestion).getQuestion(bund);
-        else
-            bund.putInt(QuestionFragment.ARG_TEXT,R.string.error_msg);
+    public int getQuestion(){
 
 
-        return bund;
+
+
+
+
+        return !this.isFinished()?this.questions.get(this.currentQuestion).getQuestion():
+                R.string.error_msg;
     }
 
+    public int getQuestionColor(){
+        return this.colors.get(this.currentQuestion%this.colors.size());
+    }
     public boolean isFinished(){
         return this.currentQuestion==this.quizSize;
     }

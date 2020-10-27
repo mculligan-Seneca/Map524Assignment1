@@ -2,7 +2,8 @@
 Mitchell Culligan
 161293170
 mculligan@myseneca.ca
-Oct 12th 2020
+Oct 30th 2020
+Project 1
  */
 package com.example.map524assignment1;
 
@@ -11,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.DialogInterface;
+
 import android.content.Context;
+import android.content.DialogInterface;
+
 import android.content.res.Configuration;
-import android.os.Build;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -54,12 +55,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                if (quiz.answerNextQuestion(v.getId() ))
-                    Toast.makeText(getApplicationContext(),R.string.right_answer,Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(),R.string.wrong_answer,Toast.LENGTH_SHORT).show();
+               if (quiz.answerNextQuestion(v.getId() ))
+                   Toast.makeText(getApplicationContext(),String.format(Locale.getDefault(),getResources()
+                                   .getString(R.string.right_answer)),
+                           Toast.LENGTH_SHORT)
+                           .show();
+                else{
+                    Toast.makeText(getApplicationContext(),String.format(Locale.getDefault(),getResources()
+                            .getString(R.string.wrong_answer)),
+                            Toast.LENGTH_SHORT)
+                            .show();
 
-
+               }
                 setQuizDisplay();
 
 
@@ -68,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+
         if(savedInstanceState==null) {
             this.quiz = QuestionDB.createQuiz();
             //this.language=1;
-            Log.d("init_state","instance state was not saved");
+
         }
         else{
             this.quiz = savedInstanceState.getParcelable("saved_quiz");
@@ -83,13 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 this.changeLanguage("fr");
 
 
-
-
         }
 
 
+        setContentView(R.layout.activity_main);
 
-        Log.d("lang_init",Locale.getDefault().toLanguageTag());
 
 
         this.builder = new AlertDialog.Builder(this);
@@ -101,23 +106,14 @@ public class MainActivity extends AppCompatActivity {
         this.progress.setMax(this.quiz.getTotalQuestions());
         this.fm = getSupportFragmentManager();
 
-
+        this.true_btn.setText(R.string.t_btn);
+        this.false_btn.setText(R.string.f_btn);
 
         this.setQuizDisplay();
     }
 
 
 
- /*   @Override
-    protected void attachBaseContext(Context newBase ){
-            String tag;
-        if(language==1)
-            tag=Locale.ENGLISH.toLanguageTag();
-        else
-            tag=Locale.FRENCH.toLanguageTag();
-        super.attachBaseContext(LocaleHelper.updateLocale(newBase,tag));
-    }
-*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -147,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
                 if(language==1) {
                     language = 2;
                     Log.d("updated_lang",String.valueOf(language));
-                    this.changeLanguage("fr");
-               //     LocaleHelper.updateLocale(this,"fr");
+                   this.changeLanguage("fr");
+                  // LocaleHelper.updateLocale(this,"fr");
                 }else if(language==2){
                     language=1;
-                    this.changeLanguage("en");
-                 //   LocaleHelper.updateLocale(this,"en");
+                   this.changeLanguage("en");
+                 //  LocaleHelper.updateLocale(this,"en");
                 }
 
                 finish();
@@ -169,9 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.progress.setProgress(this.quiz.getQuestionsCompleted());
         if(!this.quiz.isFinished()){
-                //ft = this.fm.beginTransaction();
-                //maybe not best performance
-                //ft.replace(R.id.quest_frag_id,QuestionFragment.newInstance(this.quiz.getQuestionInfo());
+               
                 this.updateFragment();
 
         }
@@ -193,10 +187,14 @@ public class MainActivity extends AppCompatActivity {
         Fragment question = fm.findFragmentById(R.id.question_frame_id);
 
         if(question==null){
-            transaction.add(R.id.question_frame_id,QuestionFragment.newInstance(this.quiz.getQuestionInfo()));
+
+            transaction.add(R.id.question_frame_id,
+                    QuestionFragment.newInstance(this.quiz.getQuestion(),this.quiz.getQuestionColor()));
 
         } else{
-            transaction.replace(R.id.question_frame_id,QuestionFragment.newInstance(this.quiz.getQuestionInfo()));
+
+            transaction.replace(R.id.question_frame_id,
+                    QuestionFragment.newInstance(this.quiz.getQuestion(),this.quiz.getQuestionColor()));
         }
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
@@ -216,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void changeLanguage(String tag){
+  public void changeLanguage(String tag){
 
 
         Locale locale=new Locale(tag);
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         Locale.setDefault(locale);
       /*  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
             config.setLocale(locale);
-        else */
+        else*/
         config.locale=locale;
 
         config.setLayoutDirection(locale);
@@ -245,5 +243,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+  /*  @Override
+    protected void attachBaseContext(Context base){
+        String tag=null;
+        if(language==1){
+            tag="en";
+        }
+        else
+        {
+            tag="fr";
+        }
+        super.attachBaseContext(LocaleHelper.updateLocale(base,tag));
+    }
+*/
 }
