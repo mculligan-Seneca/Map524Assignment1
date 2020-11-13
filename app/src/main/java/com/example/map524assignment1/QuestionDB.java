@@ -4,12 +4,12 @@ import java.util.Arrays;
 
 public class QuestionDB {
     private static final Question[] questionBank ={
-            new Question(R.string.question_1, R.id.true_btn),
-            new Question(R.string.question_2,R.id.false_btn),
+            new Question(R.string.question_1, true),
+            new Question(R.string.question_2,false),
             new Question(R.string.question_3,
-                    R.id.true_btn),
-            new Question(R.string.question_4,R.id.true_btn),
-            new Question(R.string.question_5, R.id.false_btn)
+                    true),
+            new Question(R.string.question_4,true),
+            new Question(R.string.question_5, false)
     };
 
     private static final Integer[] questionColors = {

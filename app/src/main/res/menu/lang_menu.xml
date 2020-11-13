@@ -3,5 +3,11 @@
         <item
             android:id="@+id/lang_changeId"
             android:title="@string/French"/>
+        <item
+    android:id="@+id/get_average"
+    android:title="@string/get_averages"/>
+        <item
+            android:id="@+id/reset_average"
+            android:title="@string/average_reset"/>
 
 </menu>

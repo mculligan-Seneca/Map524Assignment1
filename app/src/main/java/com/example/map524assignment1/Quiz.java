@@ -73,7 +73,7 @@ public class Quiz implements Parcelable {
         return this.currentQuestion==this.quizSize;
     }
 
-    public boolean answerNextQuestion(int attempt){
+    public boolean answerNextQuestion(boolean attempt){
         boolean isCorrect=false;
         if(!this.isFinished()) {
 
@@ -96,6 +96,9 @@ public class Quiz implements Parcelable {
     }
 
 
+    public double calculateAverage(){
+        return (double)this.correct/this.quizSize;
+    }
     @Override
     public int describeContents() {
         return 0;

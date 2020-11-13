@@ -16,4 +16,11 @@
     <string name="question_5">Java is pass by reference</string>
     <string name="French">French</string>
     <string name="English">English</string>
+    <string name="save_message">Average successfully saved</string>
+    <string name="get_averages">Get Averages</string>
+    <string name="quiz">Quiz</string>
+    <string name="total_average">Total Average</string>
+    <string name="average_reset">Reset Averages</string>
+    <string name="reset_complete">Averages successfully cleared</string>
+
 </resources>

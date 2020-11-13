@@ -70,7 +70,7 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          View v =  inflater.inflate(R.layout.fragment_question, container, false);
-         //this.setQuestion();
+
         v.setBackgroundResource(this.colour);
 
         ((TextView)v.findViewById(R.id.question_id)).setText(this.text);

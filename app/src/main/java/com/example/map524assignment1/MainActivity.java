@@ -2,8 +2,9 @@
 Mitchell Culligan
 161293170
 mculligan@myseneca.ca
-Oct 30th 2020
-Project 1
+Nov 17th,2020
+Lab 4
+
  */
 package com.example.map524assignment1;
 
@@ -18,6 +19,7 @@ import android.content.DialogInterface;
 
 import android.content.res.Configuration;
 
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -33,10 +35,11 @@ import java.text.NumberFormat;
 import androidx.fragment.app.Fragment;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogInterface.OnClickListener{
 
 
     private Quiz quiz;
+    private StorageManager storage;
     private FragmentManager fm;
     private ProgressBar progress;
     private AlertDialog.Builder builder;
@@ -44,25 +47,27 @@ public class MainActivity extends AppCompatActivity {
     private Button false_btn;
     private static int language=1;
     private Menu menu;
-    private  final DialogInterface.OnClickListener dialogClick = new DialogInterface.OnClickListener() {
+
         @Override
         public void onClick(DialogInterface dialog, int id) {
-            quiz.reset(DialogInterface.BUTTON_POSITIVE==id);
-            setQuizDisplay();
+            this.storage.saveAverageInternal(this,this.quiz.calculateAverage());
+            this.quiz.reset(DialogInterface.BUTTON_POSITIVE==id);
+
+            this.setQuizDisplay();
         }
-    };
+
     public void viewClick(View v) {
 
 
 
-               if (quiz.answerNextQuestion(v.getId() ))
-                   Toast.makeText(getApplicationContext(),String.format(Locale.getDefault(),getResources()
-                                   .getString(R.string.right_answer)),
+               if (quiz.answerNextQuestion(v.getId()==R.id.true_btn ))
+                   Toast.makeText(getApplicationContext(), getResources()
+                                   .getString(R.string.right_answer),
                            Toast.LENGTH_SHORT)
                            .show();
                 else{
-                    Toast.makeText(getApplicationContext(),String.format(Locale.getDefault(),getResources()
-                            .getString(R.string.wrong_answer)),
+                    Toast.makeText(getApplicationContext(), getResources()
+                            .getString(R.string.wrong_answer),
                             Toast.LENGTH_SHORT)
                             .show();
 
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             this.quiz = savedInstanceState.getParcelable("saved_quiz");
-            language=savedInstanceState.getInt("lang");
+            //language=savedInstanceState.getInt("lang");
             if(language==1)
                 this.changeLanguage("en");
             else
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
+        this.storage= new StorageManager();
         this.builder = new AlertDialog.Builder(this);
 
         this.progress= findViewById(R.id.quiz_progress);
@@ -142,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(language==1) {
                     language = 2;
-                    Log.d("updated_lang",String.valueOf(language));
+
                    this.changeLanguage("fr");
                   // LocaleHelper.updateLocale(this,"fr");
                 }else if(language==2){
@@ -156,9 +161,57 @@ public class MainActivity extends AppCompatActivity {
 
 
                 break;
+            case R.id.get_average:
+                this.displayAverages();
+                break;
+            case R.id.reset_average:
+                this.storage.fileReset(this);
+                Toast.makeText(getApplicationContext(),R.string.reset_complete,Toast.LENGTH_SHORT).show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void displayAverages(){
+        AlertDialog.Builder build= new AlertDialog.Builder(this);
+
+        build.setMessage(this.formatAverages())
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel,null)
+                .setTitle(R.string.get_averages);
+
+        build.create().show();
+
+    }
+
+
+    public String formatAverages(){
+           final String QUIZ_STR = getResources().getString(R.string.quiz);
+           final String AVERAGE=getResources().getString(R.string.total_average);
+            StringBuilder sb=new StringBuilder();
+            double totalAvg=0.0;
+            double next;
+            String[] averages= this.storage.readAverageDataInternal(this).split(" ");
+
+
+                    for(int i=0;i<averages.length;i++) {
+                        next=Double.parseDouble(averages[i]);
+                        totalAvg += next;
+                        sb.append(String.format(Locale.getDefault(), "%s %d: %s\n",QUIZ_STR ,
+                                i+1, NumberFormat.getPercentInstance().format(next)));
+
+                    }
+
+            if(averages.length>0)
+                totalAvg/=averages.length;
+
+
+            sb.append(String.format(Locale.getDefault(),"%s: %s",AVERAGE,
+                NumberFormat.getPercentInstance().format(totalAvg)));
+
+            return sb.toString();
     }
     public void setQuizDisplay(){
         //FragmentTransaction ft=null;
@@ -173,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
             this.builder.setMessage(this.generateCompletionMessage())
             .setCancelable(true)
-            .setPositiveButton(R.string.repeat,this.dialogClick )
-            .setNegativeButton(R.string.cancel,this.dialogClick)
+            .setPositiveButton(R.string.repeat,this )
+            .setNegativeButton(R.string.cancel,this)
             .setTitle(R.string.app_name);
             AlertDialog alert = this.builder.create();
             alert.show();
@@ -201,14 +254,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String generateCompletionMessage(){
-        int correct = this.quiz.getCorrect();
-        int totalQuestions=this.quiz.getTotalQuestions();
+
         String message = getResources().getString(R.string.completion_mssg);
-        double quizPercentage = (double)correct/totalQuestions;
 
 
-        return String.format(Locale.getDefault(),"%s %d / %d  %s\n",message,correct,totalQuestions,
-                NumberFormat.getPercentInstance().format(quizPercentage));
+
+        return String.format(Locale.getDefault(),"%s %d / %d  %s\n",message,this.quiz.getCorrect(),
+                this.quiz.getTotalQuestions(),
+                NumberFormat.getPercentInstance().format(this.quiz.calculateAverage()));
 
     }
 
@@ -218,17 +271,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         Locale locale=new Locale(tag);
-        //Context context = super.getBaseContext();
         Resources res = super.getBaseContext().getResources();
         Configuration config = res.getConfiguration();
         Locale.setDefault(locale);
-      /*  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
-            config.setLocale(locale);
-        else*/
+
         config.locale=locale;
 
-        config.setLayoutDirection(locale);
-            res.updateConfiguration(config,res.getDisplayMetrics());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          config.setLayoutDirection(locale);
+      }
+      res.updateConfiguration(config,res.getDisplayMetrics());
 
 
 
@@ -239,21 +291,9 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable("saved_quiz",this.quiz);
-        outState.putInt("lang",language);
+      // outState.putInt("lang",language);
 
     }
 
-  /*  @Override
-    protected void attachBaseContext(Context base){
-        String tag=null;
-        if(language==1){
-            tag="en";
-        }
-        else
-        {
-            tag="fr";
-        }
-        super.attachBaseContext(LocaleHelper.updateLocale(base,tag));
-    }
-*/
+
 }

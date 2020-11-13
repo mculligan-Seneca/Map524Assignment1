@@ -17,4 +17,10 @@
     <string name="question_5">" Java est passé par référence"</string>
     <string name="French">Français</string>
     <string name="English">Anglais</string>
+    <string name="save_message">Moyenne enregistrée avec succès</string>
+    <string name="get_averages">Obtenir les moyennes</string>
+    <string name="quiz">Quiz</string>
+    <string name="total_average">Moyenne totale</string>
+    <string name="average_reset">Réinitialiser les moyennes</string>
+    <string name="reset_complete">Moyennes effacées avec succès</string>
 </resources>

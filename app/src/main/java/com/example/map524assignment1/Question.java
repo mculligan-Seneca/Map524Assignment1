@@ -1,28 +1,40 @@
 package com.example.map524assignment1;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Question implements Parcelable {
     private int question;
-    private int answer;
+    private boolean answer;
+    //TODO change to boolean
 
-
-    public Question(int question, int answer){
+    public Question(int question, boolean answer){
         this.question=question;
         this.answer=answer;
     }
 
     protected Question(Parcel in) {
         question = in.readInt();
-        answer = in.readInt();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            answer = in.readBoolean();
+        }
+        else{
+            answer = in.readInt()==1;
+        }
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(question);
-        dest.writeInt(answer);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dest.writeBoolean(this.answer);
+        }
+        else
+        {
+            dest.writeInt(this.answer?1:0);
+        }
     }
 
     @Override
@@ -48,7 +60,7 @@ public class Question implements Parcelable {
             return this.question;
     }
 
-    public boolean answerQuestion(int attempt){
+    public boolean answerQuestion(boolean attempt){
         return this.answer==attempt;
     }
 
